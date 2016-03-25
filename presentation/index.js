@@ -43,6 +43,15 @@ const images = {
   markdown: require("../assets/markdown.png")
 };
 
+
+const CircleComponent = ({data}) => (
+  <svg width="100%" height="60%" viewBox="0 0 100 100">
+  {data.map(function(datum, i){
+    return <circle key={i} cx={datum} cy="50" r="5" />
+  })}
+  </svg>
+)
+
 preloader(images);
 
 const theme = createTheme({
@@ -174,13 +183,13 @@ export default class Presentation extends React.Component {
               Circle Component
             </Heading>
             <CodePane>{`
-                const CircleComponent = ({data}) => (
-                  <svg width="100%" height="60%" viewBox="0 0 100 100">
-                  data.map(function(datum){
-                    <circle cx="{datum}" cy="50" r="5">
-                  })
-                  </svg>
-                )
+              const CircleComponent = ({data}) => (
+                <svg width="100%" height="60%" viewBox="0 0 100 100">
+                {data.map(function(datum, i){
+                  return <circle key={i} cx={datum} cy="50" r="5" />
+                })}
+                </svg>
+              )
               `}
             </CodePane>
           </Slide>
@@ -196,6 +205,9 @@ export default class Presentation extends React.Component {
                 );
             `}
             </CodePane>
+          </Slide>
+          <Slide>
+            <CircleComponent data={[20, 50, 80]} />
           </Slide>
         </Deck>
       </Spectacle>
