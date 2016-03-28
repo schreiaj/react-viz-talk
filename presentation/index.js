@@ -52,6 +52,16 @@ const CircleComponent = ({data}) => (
   </svg>
 )
 
+
+const RiskAsterComponent = ({data}) => (
+  <svg width="100%" height="60%" viewBox="0 0 100 100">
+    {data.map(function(datum, i){
+      return <g key={i} id={datum.name}> </g>
+    })
+    }
+  </svg>
+)
+
 preloader(images);
 
 const theme = createTheme({
@@ -208,6 +218,59 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide>
             <CircleComponent data={[20, 50, 80]} />
+          </Slide>
+          <Slide>
+            <Heading size={4} >
+              How can I use this - JSBin?
+            </Heading>
+            <CodePane>{`
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
+            `}</CodePane>
+          </Slide>
+          <Slide>
+            <Heading size={4}>
+              In Rails
+            </Heading>
+            React-Rails Gem
+            <br />
+            - OR -
+            <br />
+            Add the JS files to your application and include them.
+          </Slide>
+          <Slide>
+            <Heading size={4}>Basically...</Heading>
+            Add the JS files and render the component. You just need ES6 transpiler for nice syntax
+          </Slide>
+          <Slide>
+            <Heading size={4}>
+              But D3 makes math easy...
+            </Heading>
+            <Appear>
+              <Heading size={5}>Then use D3 for that!</Heading>
+            </Appear>
+          </Slide>
+          <Slide>
+            <Heading size={4}>
+              Ok, but we're OHS...
+            </Heading>
+            <Appear>
+              <Heading size={4}> What's this have to do with Healthcare?</Heading>
+            </Appear>
+
+            <Appear>
+              <Heading size={4}> Let's recreate some other visuals...</Heading>
+            </Appear>
+
+          </Slide>
+
+          <Slide>
+            <Heading size={4}>
+              IE Risk Plot
+            </Heading>
+            <Appear>
+              <RiskAsterComponent data={[{name:'foo', val:2}, {name:'bar', val:2}]} />
+            </Appear>
           </Slide>
         </Deck>
       </Spectacle>
