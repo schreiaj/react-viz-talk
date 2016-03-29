@@ -278,6 +278,27 @@ export default class Presentation extends React.Component {
             </Heading>
             <RiskAsterComponent data={[{name:'foo', val:2, weight:1}, {name:'bar', val:2, weight:1}, {name:'bat', val:2, weight:2}]} />
           </Slide>
+          <Slide>
+            <CodePane>{`
+              const RiskAsterComponent = ({data}) => {
+
+                let pie = d3.layout.pie().padAngle(0.03).sort(null).value((d) => d.weight)
+                let arc = d3.svg.arc().innerRadius(200).outerRadius(250)
+                return (<svg width="60%" height="60%" viewBox="0 0 600 600">
+                  <g transform="translate(300, 300)" >
+                    {
+                      pie(data).map(function(datum, i){
+                      return <path key={i} id={datum.name} d={arc(datum)} data-attr={JSON.stringify(datum)}/>
+                    })
+                    }
+                  </g>
+                </svg>)
+              }
+
+            `}
+
+            </CodePane>
+          </Slide>
         </Deck>
       </Spectacle>
     );
