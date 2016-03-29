@@ -57,13 +57,19 @@ const CircleComponent = ({data}) => (
 
 const RiskAsterComponent = ({data}) => {
 
-  let pie = d3.layout.pie().padAngle(0.03).sort(null).value((d) => d.weight)
-  let arc = d3.svg.arc().innerRadius(200).outerRadius(250)
+  let pie = d3.layout.pie().padAngle(0.03).value((d) => d.weight)
+  let arc = d3.svg.arc().innerRadius(200).outerRadius(250).cornerRadius(5)
+  let radiusScale = d3.scale.linear().domain([0,1]).range([75, 175]).clamp(true)
+  let innerArc = d3.svg.arc().innerRadius(50).outerRadius(function(datum){return radiusScale(datum.data.val);}).cornerRadius(5)
+
   return (<svg width="60%" height="60%" viewBox="0 0 600 600">
     <g transform="translate(300, 300)" >
       {
         pie(data).map(function(datum, i){
-        return <path key={i} id={datum.name} d={arc(datum)} data-attr={JSON.stringify(datum)}/>
+        return (<g key={i}>
+          <path id={datum.name} d={arc(datum)}/>
+          <path d={innerArc(datum)} />
+          </g>)
       })
       }
     </g>
@@ -276,28 +282,109 @@ export default class Presentation extends React.Component {
             <Heading size={4}>
               IE Risk Plot
             </Heading>
-            <RiskAsterComponent data={[{name:'foo', val:2, weight:1}, {name:'bar', val:2, weight:1}, {name:'bat', val:2, weight:2}]} />
+            <RiskAsterComponent data={[{name:'foo', val:0.2, weight:1}, {name:'bar', val:0.6, weight:1}, {name:'bat', val:1, weight:2}]} />
           </Slide>
           <Slide>
             <CodePane>{`
               const RiskAsterComponent = ({data}) => {
 
-                let pie = d3.layout.pie().padAngle(0.03).sort(null).value((d) => d.weight)
-                let arc = d3.svg.arc().innerRadius(200).outerRadius(250)
+                let pie = d3.layout.pie().padAngle(0.03).value((d) => d.weight)
+                let arc = d3.svg.arc().innerRadius(200).outerRadius(250).cornerRadius(5)
+                let radiusScale = d3.scale.linear().domain([0,1]).range([75, 175]).clamp(true)
+                let innerArc = d3.svg.arc().innerRadius(50).outerRadius(function(datum){return radiusScale(datum.data.val);}).cornerRadius(5)
+
                 return (<svg width="60%" height="60%" viewBox="0 0 600 600">
                   <g transform="translate(300, 300)" >
                     {
                       pie(data).map(function(datum, i){
-                      return <path key={i} id={datum.name} d={arc(datum)} data-attr={JSON.stringify(datum)}/>
+                      return (<g key={i}>
+                        <path id={datum.name} d={arc(datum)}/>
+                        <path d={innerArc(datum)} />
+                        </g>)
                     })
                     }
                   </g>
                 </svg>)
               }
-
             `}
 
             </CodePane>
+          </Slide>
+          <Slide>
+            <Heading size={4}>No Free Lunch</Heading>
+            <List>
+              <Appear><ListItem>Out of box no nice transitions</ListItem></Appear>
+              <Appear><ListItem>May be a performance bear</ListItem></Appear>
+              <Appear><ListItem>Lots of extra D3 cruft</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide>
+            <Heading size={4}>Upsides</Heading>
+              <List>
+                <Appear><ListItem>Fewer mental gymnastics</ListItem></Appear>
+                <Appear><ListItem>Easier to debug</ListItem></Appear>
+                <Appear><ListItem>More reusable</ListItem></Appear>
+              </List>
+          </Slide>
+          <Slide>
+            <Heading size={4}>Ok, that's great, but I just need a bar chart</Heading>
+            <Appear><Heading size={4}>Enter Victory.JS</Heading></Appear>
+          </Slide>
+          <Slide>
+            <Heading>VictoryJS</Heading>
+            <Appear><BlockQuote>An ecosystem of modular data visualization components for React.</BlockQuote></Appear>
+          </Slide>
+          <Slide>
+            <Heading size={4}>What's Included</Heading>
+            <List>
+              <ListItem>Line Chart</ListItem>
+              <ListItem>Pie/Donut Chart</ListItem>
+              <ListItem>Scatter Plots</ListItem>
+              <ListItem>Axis</ListItem>
+              <ListItem>Labels</ListItem>
+              <ListItem>More being added</ListItem>
+            </List>
+          </Slide>
+          <Slide>
+            <a target="_blank" href="http://victory.formidable.com">http://victory.formidable.com</a>
+          </Slide>
+          <Slide>
+            <Heading size={4}>Ok, that's cool, but I'm confused</Heading>
+          </Slide>
+          <Slide>
+            <Heading>Use D3/React If...</Heading>
+            <List>
+              <ListItem>You're prototyping to see how something looks with data</ListItem>
+              <ListItem>You don't need a ton of animation</ListItem>
+              <ListItem>You understand the React lifecycle hooks and can add animation</ListItem>
+            </List>
+          </Slide>
+          <Slide>
+            <Heading>Use VictoryJS If...</Heading>
+            <List>
+              <ListItem>You just want a line chart</ListItem>
+              <ListItem>You have data that will change a ton and don't want to mess with React</ListItem>
+            </List>
+          </Slide>
+          <Slide>
+            <Heading size={4}>But I hate JS frameworks</Heading>
+          </Slide>
+          <Slide>
+            <Heading size={4}>Then only use React where you want the visualization</Heading>
+            <Appear><Heading size={5}>Seriously, it's that modular</Heading></Appear>
+          </Slide>
+          <Slide>
+            <Heading size={4}>TL;DR</Heading>
+            <List>
+              <Appear><ListItem>D3 is a cognitive mismatch for designers</ListItem></Appear>
+              <Appear><ListItem>React is pretty cool and pretty modular</ListItem></Appear>
+              <Appear><ListItem>VictoryJS is good for basic stuff</ListItem></Appear>
+              <Appear><ListItem>This is a hot topic of data visualization, things are moving quick</ListItem></Appear>
+              <Appear><ListItem>Use React where you need it, ignore it otherwise</ListItem></Appear>
+            </List>
+          </Slide>
+          <Slide>
+            <Heading>Questions?</Heading>
           </Slide>
         </Deck>
       </Spectacle>
