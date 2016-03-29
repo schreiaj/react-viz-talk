@@ -31,6 +31,8 @@ import createTheme from "spectacle/lib/themes/default";
 // Import custom component
 import Interactive from "../assets/interactive";
 
+const d3 = require("d3");
+
 // Require CSS
 require("normalize.css");
 require("spectacle/lib/themes/default/index.css");
@@ -53,14 +55,20 @@ const CircleComponent = ({data}) => (
 )
 
 
-const RiskAsterComponent = ({data}) => (
-  <svg width="100%" height="60%" viewBox="0 0 100 100">
-    {data.map(function(datum, i){
-      return <g key={i} id={datum.name}> </g>
-    })
-    }
-  </svg>
-)
+const RiskAsterComponent = ({data}) => {
+
+  let pie = d3.layout.pie().padAngle(0.03).sort(null).value((d) => d.weight)
+  let arc = d3.svg.arc().innerRadius(200).outerRadius(250)
+  return (<svg width="60%" height="60%" viewBox="0 0 600 600">
+    <g transform="translate(300, 300)" >
+      {
+        pie(data).map(function(datum, i){
+        return <path key={i} id={datum.name} d={arc(datum)} data-attr={JSON.stringify(datum)}/>
+      })
+      }
+    </g>
+  </svg>)
+}
 
 preloader(images);
 
@@ -268,9 +276,7 @@ export default class Presentation extends React.Component {
             <Heading size={4}>
               IE Risk Plot
             </Heading>
-            <Appear>
-              <RiskAsterComponent data={[{name:'foo', val:2}, {name:'bar', val:2}]} />
-            </Appear>
+            <RiskAsterComponent data={[{name:'foo', val:2, weight:1}, {name:'bar', val:2, weight:1}, {name:'bat', val:2, weight:2}]} />
           </Slide>
         </Deck>
       </Spectacle>
